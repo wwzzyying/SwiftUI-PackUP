@@ -9,7 +9,7 @@ import SwiftUI
 import AVKit
 
 private let voiceWidth = UIScreen.main.bounds.width
-private let voiceHeight = UIScreen.main.bounds.height / 6
+private let voiceHeight = UIScreen.main.bounds.height / 7 - 20
 
 struct VoiceView: View {
         
@@ -19,6 +19,7 @@ struct VoiceView: View {
             .navigationBarHidden(false)
             .navigationBarUIColor(Color(red: 250 / 255, green: 128 / 255, blue: 114 / 255))
         
+        // 底部
         ZStack(alignment: .center) {
             StartRecord()
         }
@@ -34,17 +35,17 @@ struct VoiceView: View {
 struct StartRecord: View {
     @State var isStart = false
     var body: some View {
-        HStack {
-            Spacer()
-            Button {
-                // backward
-            } label: {
-                Image(systemName: "backward.fill")
-                    .resizable()
-                    .frame(width: voiceWidth / 7 - 20, height: voiceWidth / 7 - 20)
-                    .foregroundColor(.gray)
-            }
-            Spacer()
+//        HStack {
+//            Spacer()
+//            Button {
+//                // backward
+//            } label: {
+//                Image(systemName: "backward.fill")
+//                    .resizable()
+//                    .frame(width: voiceWidth / 7 - 20, height: voiceWidth / 7 - 20)
+//                    .foregroundColor(.gray)
+//            }
+//            Spacer()
             ZStack {
                 Image(systemName: "circle")
                     .resizable()
@@ -74,17 +75,17 @@ struct StartRecord: View {
                     }
                 }
             }
-            Spacer()
-            Button {
-                // forward
-            } label: {
-                Image(systemName: "forward.fill")
-                    .resizable()
-                    .frame(width: voiceWidth / 7 - 20, height: voiceWidth / 7 - 20)
-                    .foregroundColor(.gray)
-            }
-            Spacer()
-        }
+//            Spacer()
+//            Button {
+//                // forward
+//            } label: {
+//                Image(systemName: "forward.fill")
+//                    .resizable()
+//                    .frame(width: voiceWidth / 7 - 20, height: voiceWidth / 7 - 20)
+//                    .foregroundColor(.gray)
+//            }
+//            Spacer()
+//        }
     }
 }
 
