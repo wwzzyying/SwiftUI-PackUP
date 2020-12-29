@@ -9,18 +9,20 @@ import SwiftUI
 import AlertX
 
 /* navigationLink返回不能主动刷新 */
-/* 刷新按钮没用？ */
+/* 刷新按钮没用？ delete异常 */
 struct AddressList: View {
     
     @AppStorage("count") private var countStorage = 1
     @State private var countList = 1
-    @State private var refresh = false
+    @State private var refresh = false // 无效，就算主动刷新，列表数据也还没更新
+//    @State private var list: [String] = [String]()
     
     var body: some View {
         ZStack {
             VStack {
                 Form {
                     ForEach(0 ..< countList, id: \.self) {index in
+//                        let listItemName = list[index]
                         let listItemName = UserDefaults.standard.object(forKey: "address\(index)") as? String ?? ""
                         NavigationLink(listItemName, destination: ContentView(id: index))
                     }
@@ -29,6 +31,7 @@ struct AddressList: View {
                 .navigationBarItems(trailing: HStack {
                     Button(action: {
                         self.refresh.toggle()
+                        self.refreshList()
                     }, label: {
                         Text(Image(systemName: "arrow.clockwise"))
                     }).padding(.trailing, 10)
@@ -36,6 +39,7 @@ struct AddressList: View {
                     Button(action: {
                         countStorage = countStorage + 1
                         countList = countStorage
+                        
                     }, label: {
                         Text(Image(systemName: "plus"))
                     }).padding(.leading, 10)
@@ -57,10 +61,23 @@ struct AddressList: View {
         }
     }
     
+    // 更新列表
+    func refreshList() {
+        
+    }
+    
     // 删除列表项
     func deleteList(at offsets: IndexSet) {
-        if let index = offsets.first { //获得索引集合里的第一个元素，然后从数组里删除对应索引的元素
-            replaceObject(index: index)
+        if let index = offsets.first
+        { //获得索引集合里的第一个元素，然后从数组里删除对应索引的元素
+            print(index)
+            // 冒泡删除
+            for i in index..<countList-1 {
+                replaceObject(index: i)
+            }
+            // 无论删除哪个，最后一个最终都要删除（针对单独删除最后一个的情况）
+            deleteEnd(index: countList-1)
+            // 删除结束后更新列表
             countStorage -= 1
             countList = countStorage
         }
@@ -80,13 +97,17 @@ struct AddressList: View {
         UserDefaults.standard.setValue(address1, forKey: "address\(index)")
         UserDefaults.standard.setValue(tagIndex1, forKey: "tagIndex\(index)")
         UserDefaults.standard.setValue(type1, forKey: "type\(index)")
-        
-        // 清空index+1内容
-        UserDefaults.standard.setValue("", forKey: "name\(index+1)")
-        UserDefaults.standard.setValue("", forKey: "phoneNumber\(index+1)")
-        UserDefaults.standard.setValue("", forKey: "address\(index+1)")
-        UserDefaults.standard.setValue(0, forKey: "tagIndex\(index+1)")
-        UserDefaults.standard.setValue("", forKey: "type\(index+1)")
+    }
+    
+    // 最后一个列表项直接清空，无论是删除前面还是删除最后一个，最后一个都是清空的
+    func deleteEnd(index: Int) {
+        // 清空end内容
+        print("end\(index)")
+        UserDefaults.standard.setValue("", forKey: "name\(index)")
+        UserDefaults.standard.setValue("", forKey: "phoneNumber\(index)")
+        UserDefaults.standard.setValue("", forKey: "address\(index)")
+        UserDefaults.standard.setValue(0, forKey: "tagIndex\(index)")
+        UserDefaults.standard.setValue("", forKey: "type\(index)")
     }
 }
 
@@ -167,6 +188,7 @@ struct ContentView: View {
                             self.endEditing()
                         } label: {
                             Text("确定")
+                                .foregroundColor(.blue)
                         }
                     }
                 }
@@ -181,20 +203,24 @@ struct ContentView: View {
                     encodeUserDefaults(en_people: people, en_phone: phone, en_address: address, en_tagIndex: tagIndex, en_type: type)
                 } label: { () in
                     Text("保存")
+                        .foregroundColor(.blue)
                 }
                 .disabled(invalidInput) // 基本信息为空则不能点
                 .alignmentGuide(.leading) { (dimension) -> CGFloat in
                     dimension[.trailing]
                 }
-                .alertX(isPresented: $isPresent) { () -> AlertX in
-                    AlertX(
-                        title: Text("确认地址"),
-                        message: Text("\(confirmMsg)"),
-                        primaryButton: .default(Text("取消")),
-                        secondaryButton: .default(Text("确定")),
-                        theme: displayMode == .light ? .sun(withTransparency: true, roundedCorners: true) : .dark(withTransparency: true, roundedCorners: true),
-                        animation: .fadeEffect()
-                    )
+//                .alertX(isPresented: $isPresent) { () -> AlertX in
+//                    AlertX(
+//                        title: Text("确认地址"),
+//                        message: Text("\(confirmMsg)"),
+//                        primaryButton: .default(Text("取消")),
+//                        secondaryButton: .default(Text("确定")),
+//                        theme: displayMode == .light ? .sun(withTransparency: true, roundedCorners: true) : .dark(withTransparency: true, roundedCorners: true),
+//                        animation: .fadeEffect()
+//                    )
+//                }
+                .alert(isPresented: $isPresent) { () -> Alert in
+                    Alert(title: Text("确认地址"), message: Text("\(confirmMsg)"), primaryButton: .default(Text("取消")), secondaryButton: .default(Text("确定")))
                 }
             }
             
@@ -206,6 +232,7 @@ struct ContentView: View {
                     UIPasteboard.general.string = "\(people) \(phone) \(address)"
                 } label: {
                     Text("一键复制")
+                        .foregroundColor(.blue)
                 }
                 .disabled(invalidInput)
                 .alertX(isPresented: $isPresent2) { () -> AlertX in

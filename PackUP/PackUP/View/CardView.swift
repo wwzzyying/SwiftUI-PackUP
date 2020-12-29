@@ -21,16 +21,17 @@ struct CardView: View {
 //                .fill(Color(red: 255 / 255, green: 192 / 255, blue: 203 / 255))
                 .fill(Color(red: 220 / 255, green: 220 / 255, blue: 220 / 255))
                 .opacity(1)
-                .frame(width: cardWidth / 3 + 20, height: cardWidth / 3 + 20)
+                .frame(width: cardWidth / 3 + 10, height: cardWidth / 3 + 10)
             
             VStack {
                 Image(icon)
                     .resizable()
                     .frame(width: 80, height: 80, alignment: .center)
                     .opacity(0.8)
-                    .padding()
+                    .padding(5)
                 
                 Text(text)
+                    .font(.system(size: 15))
                     .bold()
                     .foregroundColor(.black)
             }
@@ -40,6 +41,6 @@ struct CardView: View {
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        CardView(icon: "录音", text: "Voice")
+        CardView(icon: "录音", text: "录音修改器")
     }
 }

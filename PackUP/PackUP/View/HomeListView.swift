@@ -22,6 +22,7 @@ struct DataInfo {
 
 struct HomeListView: View {
     @ObservedObject var data = Address()
+    @State private var selection = 0
     
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
@@ -37,85 +38,83 @@ struct HomeListView: View {
 //                .bold()
 //        }.frame(width: width, height: showHeight)
         NavigationView {
-//            Form { // 可以多个Section
-//                Section { // footer: Text("收货信息：\(data.name) \(data.phoneNumber) \(data.address)").lineLimit(1)
-//                    List() {
-//                        NavigationLink(destination: AddressList()) {
-//                            navigationLinkItem(icon: "地址", text: "收货地址")
-//                        }
-//                    }
-//                }
-//                .frame(width: UIScreen.main.bounds.width, height: 60, alignment: .leading)
-//
-//                Section { //(footer: Text("身份信息这里就不显示预览了"))
-//                    List() {
-//                        NavigationLink(destination: TravelView()) {
-//                            navigationLinkItem(icon: "旅游攻略", text: "旅游打卡地")
-//                        }
-//                    }
-//                }
-//                .frame(width: UIScreen.main.bounds.width, height: 60, alignment: .center)
-//
-//                Section { //(footer: Text("placeholder"))
-//                    List() {
-//                        NavigationLink(destination: VoiceView()) {
-//                            navigationLinkItem(icon: "luyin", text: "录音处理器")
-//                        }
-//                    }
-//                }
-//                .frame(width: UIScreen.main.bounds.width, height: 60, alignment: .center)
-//
-//                Section {
-//                    List() {
-//                        NavigationLink(destination: EasterEggView()) {
-//                            navigationLinkItem(icon: "猫", text: "猫咪识别器")
-//                        }
-//                    }
-//                }
-//                .frame(width: UIScreen.main.bounds.width, height: 60, alignment: .center)
-//            }
-            ZStack {
-                Image("背景")
-                    .resizable()
-                    .edgesIgnoringSafeArea(.all)
-                    .scaledToFill()
-                
-                VStack {
-                    HStack {
-                        Spacer()
-                        NavigationLink(destination: AddressList()) {
-                            CardView(icon: "地址", text: "地址簿")
-                        }
-                        .padding(.horizontal)
-                        Spacer()
-                        NavigationLink(destination: TravelView()) {
-                            CardView(icon: "打卡", text: "旅游打卡")
-                        }
-                        .padding(.horizontal)
-                        Spacer()
-                    }
-                    .padding(.top, contentHeight / 7)
+            // TabView不能放在NavigationView上，会导致NavigationLink跳转页面被覆盖一个Tab
+            TabView(selection: self.$selection) {
+    //            Form { // 可以多个Section
+    //                Section { // footer: Text("收货信息：\(data.name) \(data.phoneNumber) \(data.address)").lineLimit(1)
+    //                    List() {
+    //                        NavigationLink(destination: AddressList()) {
+    //                            navigationLinkItem(icon: "地址", text: "收货地址")
+    //                        }
+    //                    }
+    //                }
+                ZStack {
+                    Image("背景")
+                        .resizable()
+                        .edgesIgnoringSafeArea(.all)
+                        .scaledToFill()
                     
-                    HStack {
-                        Spacer()
-                        NavigationLink(destination: VoiceView()) {
-                            CardView(icon: "录音", text: "录音处理器")
+                    VStack {
+                        HStack {
+                            Spacer()
+                            NavigationLink(destination: AddressList()) {
+                                CardView(icon: "地址", text: "地址簿")
+                            }
+                            .padding(.horizontal)
+                            Spacer()
+                            NavigationLink(destination: TravelView()) {
+                                CardView(icon: "打卡", text: "旅游打卡")
+                            }
+                            .padding(.horizontal)
+                            Spacer()
                         }
-                        .padding(.horizontal)
-                        Spacer()
-                        NavigationLink(destination: EasterEggView()) {
-                            CardView(icon: "放大镜", text: "猫咪识别器")
+                        .padding(.top, contentHeight / 7)
+                        
+                        HStack {
+                            Spacer()
+                            NavigationLink(destination: VoiceView(audioRecorder: AudioRecorder())) {
+                                CardView(icon: "录音", text: "录音处理器")
+                            }
+                            .padding(.horizontal)
+                            Spacer()
+                            NavigationLink(destination: EasterEggView()) {
+                                CardView(icon: "放大镜", text: "猫咪识别器")
+                            }
+                            .padding(.horizontal)
+                            Spacer()
                         }
-                        .padding(.horizontal)
+                        .padding(.vertical, 30)
+                        
                         Spacer()
+
                     }
-                    .padding(.vertical, 30)
                     
-                    Spacer()
                 }
-                .navigationBarTitle("PackUP")
+                .tabItem({
+                    Image(systemName: "house")
+                    // 需要修改颜色
+                    Text("主页面")
+                })
+                .tag(0)
+                
+                // 设置
+                ZStack {
+                    Image("背景2")
+                        .resizable()
+                        .edgesIgnoringSafeArea(.all)
+                        .scaledToFill()
+                    
+                    Text("设置")
+                }
+                .tabItem({
+                    Image(systemName: "gear")
+                    // 需要修改颜色
+                    Text("设置")
+                })
+                .tag(1)
             }
-        }.accentColor(.white) // 修改back button颜色
+            .navigationBarTitle("PackUP")
+        }.accentColor(.white)// 修改back button颜色,需要作用在NavigationView上
     }
 }
 

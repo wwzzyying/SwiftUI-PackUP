@@ -3,7 +3,7 @@
 //  AddProductAddress
 //
 //  Created by SD.Man on 2020/10/30.
-//  未解决URL Schemes跳转到Safari问题，List UI问题
+//  未解决List UI问题
 
 import SwiftUI
 import MapKit
@@ -14,6 +14,7 @@ private let iconWidth = UIScreen.main.bounds.width / 8
 private let iconHeight = UIScreen.main.bounds.width / 8
 private let showHeight = UIScreen.main.bounds.height / 3.5
 private var daddr = ""
+private var locationManager: CLLocationManager = CLLocationManager()
 
 struct makeList: View {
     var image = "旅游攻略"
@@ -104,23 +105,22 @@ struct mapView: UIViewRepresentable {
         view.showsUserLocation = true
         view.userTrackingMode = .follow
         
-        let locationManager = CLLocationManager()
+//        locationManager = CLLocationManager()
         locationManager.requestAlwaysAuthorization()
         locationManager.requestWhenInUseAuthorization()
-        
+                
         if CLLocationManager.locationServicesEnabled() {
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                // 用可选链式调用避免第一次未授权定位时强制解包引发闪退
-                if let location = locationManager.location?.coordinate {
-                    let span = MKCoordinateSpan(latitudeDelta: 0.004, longitudeDelta: 0.004)
-                    let region = MKCoordinateRegion(center: location, span: span)
-                    view.setCenter(location, animated: true)
-                    view.setRegion(region, animated: true)
-                    locationManager.stopUpdatingLocation() // 点击授权后停止不断弹出获取定位弹窗
-                }
+//              if let location = locationManager.location?.coordinate// 用可选链式调用避免第一次未授权定位时强制解包引发闪退
+                let location = view.userLocation.coordinate // 使用MapView中的定位，避免使用CLLocationManager中的偏移定位
+                let span = MKCoordinateSpan(latitudeDelta: 0.002, longitudeDelta: 0.002)
+                let region = MKCoordinateRegion(center: location, span: span)
+                view.setCenter(location, animated: true)
+                view.setRegion(region, animated: true)
+                locationManager.stopUpdatingLocation() // 点击授权后停止不断弹出获取定位弹窗
             }
         }
     }
@@ -149,7 +149,6 @@ struct goToMap {
         let newUrl = iOSMapUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         // decode
-        
         if let url = URL(string: newUrl) {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url)
@@ -161,13 +160,12 @@ struct goToMap {
     
     // open Gaode Map
     func launchGaodeMap(daddr: String) {
-        let gaodeMapUrl = "iosmap://poi?sourceApplication=applicationName&name=abc&lat1=36.1&lon1=116.1&lat2=36.2&lon2=116.2&dev=0"
+        let gaodeMapUrl = "iosamap://poi?sourceApplication=PackUP&name=\(daddr)&dev=1"
         
         // encode
         let newUrl = gaodeMapUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         // decode
-        
         if let url = URL(string: newUrl) {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url)
@@ -179,18 +177,17 @@ struct goToMap {
     
     // open Baidu Map
     func launchBaiduMap(daddr: String) {
-        let gaodeMapUrl = "iosmap://poi?sourceApplication=applicationName&name=abc&lat1=36.1&lon1=116.1&lat2=36.2&lon2=116.2&dev=0"
+        let baiduMapUrl = "baidumap://map/nearbysearch?query=\(daddr)&radius=4000&src=tech.sdman.AddProductAddress"
         
         // encode
-        let newUrl = gaodeMapUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let newUrl = baiduMapUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         // decode
-        
         if let url = URL(string: newUrl) {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url)
             } else {
-                print("gaodeMapUrl cannot open")
+                print("baiduMapUrl cannot open")
             }
         }
     }
@@ -220,6 +217,7 @@ struct TravelView: View {
                     self.updateTravelData() // 更新travelData对象的数据
                     self.inputPlace = "" // 点击添加后清空输入框
                     self.endEditing() // 收起键盘
+                    TravelTool.replacer.saveTravelData(travelData: travelData)
                 } label: {
                     Text("添加")
                         .font(.title3)
@@ -264,11 +262,11 @@ struct TravelView: View {
                     goMap.launchiOSMap(daddr: daddr)
                 }),
                 .default(Text("高德地图"), action: {
-                    // goMap操作需要真机操作
+                    goMap.launchGaodeMap(daddr: daddr)
                     print("2")
                 }),
                 .default(Text("百度地图"), action: {
-                    // goMap操作需要真机操作
+                    goMap.launchBaiduMap(daddr: daddr)
                     print("3")
                 }),
                 .cancel()
