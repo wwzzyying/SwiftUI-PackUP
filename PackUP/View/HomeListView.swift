@@ -73,12 +73,12 @@ struct HomeListView: View {
                         HStack {
                             Spacer()
                             NavigationLink(destination: VoiceView(audioRecorder: AudioRecorder())) {
-                                CardView(icon: "录音", text: "录音处理器")
+                                CardView(icon: "录音", text: "录音器")
                             }
                             .padding(.horizontal)
                             Spacer()
                             NavigationLink(destination: EasterEggView()) {
-                                CardView(icon: "放大镜", text: "猫咪识别器")
+                                CardView(icon: "放大镜", text: "物体识别器")
                             }
                             .padding(.horizontal)
                             Spacer()

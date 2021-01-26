@@ -74,7 +74,7 @@ struct EasterEggView: View {
                 .font(.subheadline)
         }
         .navigationBarUIColor(.blue)
-        .navigationBarTitle(Text("猫咪识别器"))
+        .navigationBarTitle(Text("物体识别器"))
         .alert(isPresented: $isShowAlert, content: {
             if label.count == 1 {
                 return Alert(title: Text("\(label[0])"))
@@ -122,7 +122,7 @@ class loadModel {
         let model: VNCoreMLModel = {
             do {
                 let config = MLModelConfiguration()
-                return try VNCoreMLModel(for: CatTypeClassify(configuration: config).model)
+                return try VNCoreMLModel(for: MobileNetV2Int8LUT(configuration: config).model)
             } catch {
                 print(error)
                 fatalError("Couldn't create CatTypeClassify")

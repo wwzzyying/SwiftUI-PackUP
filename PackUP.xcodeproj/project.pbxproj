@@ -25,6 +25,7 @@
 		0479BF572530B6F300EBD1EF /* PackUPUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0479BF562530B6F300EBD1EF /* PackUPUITests.swift */; };
 		048F3D852545971C0095A24A /* HomeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048F3D842545971C0095A24A /* HomeListView.swift */; };
 		04A794D825790CA6004A449D /* CatTypeClassify.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 04A794D725790CA6004A449D /* CatTypeClassify.mlmodel */; };
+		04AB0A4325C0519F006C78C3 /* MobileNetV2Int8LUT.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 04AB0A4225C0519F006C78C3 /* MobileNetV2Int8LUT.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		048C0EDB253D493900521135 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		048F3D842545971C0095A24A /* HomeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListView.swift; sourceTree = "<group>"; };
 		04A794D725790CA6004A449D /* CatTypeClassify.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = CatTypeClassify.mlmodel; sourceTree = "<group>"; };
+		04AB0A4225C0519F006C78C3 /* MobileNetV2Int8LUT.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2Int8LUT.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				04A794D725790CA6004A449D /* CatTypeClassify.mlmodel */,
+				04AB0A4225C0519F006C78C3 /* MobileNetV2Int8LUT.mlmodel */,
 				04798CF3253D80D30068FF0C /* AddressData.swift */,
 				0470D2BF2557EBDF00D330A8 /* TravelData.swift */,
 				04297D8325A06D18001546BA /* RecordingDataModel.swift */,
@@ -336,6 +339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04297D8425A06D18001546BA /* RecordingDataModel.swift in Sources */,
+				04AB0A4325C0519F006C78C3 /* MobileNetV2Int8LUT.mlmodel in Sources */,
 				045A7A392581223900BA4956 /* PopupView.swift in Sources */,
 				040BF79525BBCAF800F86C01 /* AudioPlayHelper.swift in Sources */,
 				046D459C25715FC8004AA2A9 /* EasterEggView.swift in Sources */,
