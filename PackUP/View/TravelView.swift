@@ -14,7 +14,7 @@ private let iconWidth = UIScreen.main.bounds.width / 8
 private let iconHeight = UIScreen.main.bounds.width / 8
 private let showHeight = UIScreen.main.bounds.height / 3.5
 private var daddr = ""
-private var locationManager: CLLocationManager = CLLocationManager()
+var locationManager: CLLocationManager = CLLocationManager()
 
 struct makeList: View {
     var image = "旅游攻略"
@@ -106,8 +106,8 @@ struct mapView: UIViewRepresentable {
         view.userTrackingMode = .follow
         
 //        locationManager = CLLocationManager()
-        locationManager.requestAlwaysAuthorization()
-        locationManager.requestWhenInUseAuthorization()
+//        locationManager.requestAlwaysAuthorization()放到主页面实现打开app提示权限
+//        locationManager.requestWhenInUseAuthorization()
                 
         if CLLocationManager.locationServicesEnabled() {
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters

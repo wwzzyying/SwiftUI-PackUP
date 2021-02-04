@@ -22,6 +22,7 @@ struct EasterEggView: View {
     @State private var label = [String]()
     @State private var isShowAlert = false
     @State private var libraryOrCamera = false // true-PhotoLibrary, false-Camera
+    private var hasImage: UIImage?
     
     var body: some View {
         VStack {
@@ -84,7 +85,12 @@ struct EasterEggView: View {
         })
         .sheet(isPresented: libraryOrCamera ? $isShowPhotoLibrary : $isShowCamera) {
             // dismissed to do
-            label = loadModel().imageClassify(image: CIImage(image: image)!)
+            // 可选链式解包，避免未选中图片时崩溃
+            if let ciimage = CIImage(image: image) {
+                label = loadModel().imageClassify(image: ciimage)
+            } else {
+                label = ["未选中图片"]
+            }
             self.isShowAlert = true
             getFeatures(label: label)
         } content: {

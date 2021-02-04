@@ -150,7 +150,7 @@ struct ContentView: View {
     }
     
     var body: some View {
-        let displayMode = UITraitCollection.current.userInterfaceStyle //用于获取当前模式，便于根据显示模式修改组件属性
+        //let displayMode = UITraitCollection.current.userInterfaceStyle //用于获取当前模式，便于根据显示模式修改组件属性
         
         Form {
             Section(header: Text("输入收货人信息")) {

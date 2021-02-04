@@ -27,6 +27,8 @@ struct HomeListView: View {
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()
     }
     
     var body: some View {
@@ -90,6 +92,7 @@ struct HomeListView: View {
                     }
                     
                 }
+                
                 .tabItem({
                     Image(systemName: "house")
                     // 需要修改颜色
